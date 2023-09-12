@@ -1,8 +1,8 @@
 # Análisis de datos metagenómicos
 
-Práctica de metagenómica para el tópico **Hackeando las comunidades microbianas** impartido en el Instituto de Ciencias del Mar y Limnología (ICMyL) de la UNAM. El material de esta práctica inicialmente se preparó para los Talleres Internacionales de Bioinformática (TIB2022) organizados por la Sociedad Mexicana de Bioinformática (SMB) y la Comunidad de Desarrollo de Software Bioinformático (CDSB). El material se ha ido modificando con el tiempo y sigue en desarrollo. 
+Práctica de metagenómica para el tópico **Hackeando las comunidades microbianas** impartido en el Instituto de Ciencias del Mar y Limnología (**ICMyL**) de la **UNAM**. El material de esta práctica inicialmente se preparó para los Talleres Internacionales de Bioinformática (**TIB2022**) organizados por la Sociedad Mexicana de Bioinformática (SMB) y la Comunidad de Desarrollo de Software Bioinformático (**CDSB**). El material se ha ido modificando con el tiempo y sigue en desarrollo. 
 
-Autoras: Mirna Rosas Vázquez Landa @MirnaVazquez y Diana Hernández Oaxaca @DianaOaxaca
+Autoras: Mirna Rosas Vázquez Landa [@MirnaVazquez](https://github.com/mirnavazquez) y Diana Hernández Oaxaca [@DianaOaxaca](https://github.com/DianaOaxaca)
 
 
 
