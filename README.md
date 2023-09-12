@@ -102,7 +102,7 @@ conda activate metagenomics
 Ejecutamos megahit ...
 
 ```bash
-megahit -t 34 --k-list 21,33,55,77,99 --min-contig-len 1000 -1 data/clean/fermentation_1.fastq -2 data/clean/fermentation_2.fastq -o results/03.megahit 
+megahit -t 34 --k-list 21,33,55,77,99,127 --min-contig-len 1000 -1 data/clean/fermentation_1.fastq -2 data/clean/fermentation_2.fastq -o results/03.megahit 
 ```
 
 #### **[MetaSPAdes](https://github.com/ablab/spades)** 
@@ -116,7 +116,7 @@ mkdir -p results/03.metaspades
 Y lo ejecutamos ....
 
 ```bash
-spades.py --meta -k 21,33,55,77,99 -t 30 -1 data/clean/fermentation_1.fastq -2 data/clean/fermentation_2.fastq -o results/03.metaspades 
+spades.py --meta -k 21,33,55,77,99,127 -t 30 -1 data/clean/fermentation_1.fastq -2 data/clean/fermentation_2.fastq -o results/03.metaspades 
 ```
 
 Desactivamos el ambiente
