@@ -231,7 +231,7 @@ Ahora si, para poder agrupar en *bins* el coensamble, los *binneadores* requiere
  
 
 ```bash
-samtools view -bShu results/04.depth/fermentation.metaspades.sam | samtools sort -@ 80 -o results/04.depth/fermentation_metaspades.bam
+samtools view -bShu results/04.depth/fermentation.metaspades.sam | samtools sort -@ 80 -o results/04.depth/fermentation_metaspades_sorted.bam
 samtools index results/04.depth/fermentation_metaspades_sorted.bam
 ```
 
