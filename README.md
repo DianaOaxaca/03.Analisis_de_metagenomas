@@ -25,6 +25,9 @@ https://www.nature.com/articles/s41598-020-71864-4
 ```bash
 # Creamos los directorios en donde empezaremos a trabajar
 mkdir -p Análisis_de_metagenomas/{data/{raw,clean},results}
+```
+
+```bash
 #Accedemos al directorio principal
 cd Análisis_de_metagenomas
 ```
@@ -44,7 +47,7 @@ fastqc data/raw/*.fastq -o results/01.fastqc/
 ```
 
 ```bash
-conda activate /botete/diana/.conda/envs/qiime2-2022.11
+#conda activate /botete/diana/.conda/envs/qiime2-2022.11
 multiqc results/01.fastqc/*.zip -o results/01.fastqc/multiqc
 ```
 
@@ -68,7 +71,7 @@ Ahora si ejecutamos multiqc que esta en en el ambiente de qiime2, por eso lo vam
 
 ```bash
 #Activamos el ambiente
-conda activate /botete/diana/.conda/envs/qiime2-2022.11
+#conda activate /botete/diana/.conda/envs/qiime2-2022.11
 #Ejecutamos multiqc
 multiqc results/02.trimgalore/zips/*.zip -o results/02.trimgalore/zips/multiqc 
 ```
