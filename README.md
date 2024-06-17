@@ -92,13 +92,7 @@ Te pedirá tu contrase;a del servidor
 
 La herramienta **[TrimGalore](https://github.com/FelixKrueger/TrimGalore)** nos permite eliminar lecturas de baja calidad, adaptadores, etc. Y con  [**MultiQC**](https://github.com/ewels/MultiQC), podemos ver las calidades del conjunto de lecturas. Existen otros programas para limpiar las lecturas como **[Trimmomatic](https://github.com/usadellab/Trimmomatic)**.
 
-Vamos a limpiar los datos del **Tiempo 0 hrs**
-
-```bash
-#Ejecutamos trim_galore para filtrar
-trim_galore --fastqc -j 4 --paired data/raw/pulque/pulquet0_1_10M.fastq data/raw/pulque/pulquet0_2_10M.fastq -o results/02.trimgalore/pulquet0_trimgalore
-```
-Para aguamiel seria asi:
+Vamos a limpiar los datos de **Aguamiel**
 
 ```bash
 trim_galore --fastqc -j 15 --paired data/raw/pulque/Pulque-AM_SRR10997050_1_10M.fastq data/raw/pulque/Pulque-AM_SRR10997050_2_10M.fastq -o results/02.trimgalore/pulqueAM_trimgalore
