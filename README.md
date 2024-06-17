@@ -102,17 +102,11 @@ trim_galore --fastqc -j 15 --paired data/raw/pulque/Pulque-AM_SRR10997050_1_10M.
 
 Para evaluar los resultados de calidad tras el filtrado, podemos ejecutar **multiqc** otra vez pero sobre los datos ya limpios
 
-Creamos el directorio donde alojaremos las entradas de multiqc y movemos estos archivos al nuevo directorio.
-
-```bash
-mkdir -p results/02.trimgalore/zips
-mv results/02.trimgalore/*/*.zip results/02.trimgalore/zips/
-```
 
 Ejecutamos multiqc
 
 ```bash
-multiqc results/02.trimgalore/zips/*.zip -o results/02.trimgalore/zips/multiqc 
+multiqc results/02.trimgalore/pulqueAM_trimgalore/*.zip -o results/02.trimgalore/multiqc 
 ```
 
 Movemos nuestros datos limpios al subdirectorio `data/clean`
