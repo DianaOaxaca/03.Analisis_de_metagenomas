@@ -43,7 +43,12 @@ mkdir -p results/{01.fastqc,02.trimgalore}
 ```
 
 ```bash
-fastqc data/raw/*.fastq -o results/01.fastqc/
+cd data/raw
+ln -s ../../curso_metagenomas/pulque/ .
+```
+
+```bash
+fastqc data/raw/pulque/*.fastq -o results/01.fastqc/
 ```
 
 ```bash
