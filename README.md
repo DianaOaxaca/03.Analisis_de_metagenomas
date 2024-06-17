@@ -85,7 +85,7 @@ Vamos a limpiar los datos del **Tiempo 0 hrs**
 #Ejecutamos trim_galore para filtrar
 trim_galore --fastqc -j 45 --paired data/raw/pulque/pulquet0_1_10M.fastq data/raw/pulque/pulquet0_2_10M.fastq -o results/02.trimgalore/pulquet0_trimgalore
 ```
-**NOTA** Limpiamos los de tiempo 0, pero nos falta aguamiel, tiempo 3,6 y 12 horas
+**NOTA** Limpiamos los de tiempo 0, pero nos falta aguamiel, tiempo 3, 6 y 12 horas. Podemos hacer un ciclo for para correr todos o correrlos por separado.
 
 Para evaluar los resultados de calidad tras el filtrado, podemos ejecutar **multiqc** otra vez pero sobre los datos ya limpios
 
@@ -96,11 +96,7 @@ mkdir -p results/02.trimgalore/zips
 mv results/02.trimgalore/*/*.zip results/02.trimgalore/zips/
 ```
 
-Ahora si ejecutamos multiqc que esta en en el ambiente de qiime2, por eso lo vamos a activar. OJO, multiqc puede estar alojado en un ambiente independiente o instalarse fuera de ambientes, en el servidor esta dentro de qiime pero no es una regla.
-
 ```bash
-#Activamos el ambiente
-#conda activate /botete/diana/.conda/envs/qiime2-2022.11
 #Ejecutamos multiqc
 multiqc results/02.trimgalore/zips/*.zip -o results/02.trimgalore/zips/multiqc 
 ```
