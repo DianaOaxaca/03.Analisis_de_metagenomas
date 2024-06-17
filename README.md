@@ -47,12 +47,32 @@ cd data/raw
 ln -s ../../curso_metagenomas/pulque/ .
 ```
 
+Activamos el ambiente patra **fastqc**
+
+```bash
+conda activate fastqc
+```
+
+Ejecutamos  fastqc
+
 ```bash
 fastqc data/raw/pulque/*.fastq -o results/01.fastqc/
 ```
 
+Desactivamos el ambiente
+
 ```bash
-#conda activate /botete/diana/.conda/envs/qiime2-2022.11
+conda deactivate
+```
+
+Ahora activamos el ambiente donde se encuentra **multiqc**
+
+```bash
+conda activate metagenomas
+```
+
+```bash
+
 multiqc results/01.fastqc/*.zip -o results/01.fastqc/multiqc
 ```
 
