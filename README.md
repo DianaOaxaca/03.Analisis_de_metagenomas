@@ -44,7 +44,7 @@ mkdir -p results/{01.fastqc,02.trimgalore}
 
 ```bash
 cd data/raw
-ln -s ../../curso_metagenomas/pulque/ .
+ln -s ../../../curso_metagenomas/pulque/ .
 ```
 
 Activamos el ambiente patra **fastqc**
