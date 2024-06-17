@@ -82,6 +82,14 @@ multiqc results/01.fastqc/*.zip -o results/01.fastqc/multiqc
 ```
 Descarga y visualiza el archivo multiqc_report.html
 
+En una terminal nueva sin conectarse al servidor, es decir que sea la terminal de tu computadora
+
+```bash
+scp USUARIO@IP:/home/USUARIO/Análisis_de_metagenomas/results/01.fastqc/multiqc/multiqc_report.html .
+```
+Te pedirá tu contrase;a del servidor
+
+
 La herramienta **[TrimGalore](https://github.com/FelixKrueger/TrimGalore)** nos permite eliminar lecturas de baja calidad, adaptadores, etc. Y con  [**MultiQC**](https://github.com/ewels/MultiQC), podemos ver las calidades del conjunto de lecturas. Existen otros programas para limpiar las lecturas como **[Trimmomatic](https://github.com/usadellab/Trimmomatic)**.
 
 Vamos a limpiar los datos del **Tiempo 0 hrs**
