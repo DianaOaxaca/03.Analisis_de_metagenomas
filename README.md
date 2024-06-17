@@ -70,6 +70,7 @@ Ahora activamos el ambiente donde se encuentra **multiqc**
 ```bash
 conda activate metagenomas
 ```
+Y corremos multiqc
 
 ```bash
 
@@ -78,12 +79,15 @@ multiqc results/01.fastqc/*.zip -o results/01.fastqc/multiqc
 
 La herramienta **[TrimGalore](https://github.com/FelixKrueger/TrimGalore)** nos permite eliminar lecturas de baja calidad, adaptadores, etc. Y con  [**MultiQC**](https://github.com/ewels/MultiQC), podemos ver las calidades del conjunto de lecturas. Existen otros programas para limpiar las lecturas como **[Trimmomatic](https://github.com/usadellab/Trimmomatic)**.
 
+Vamos a limpiar los datos del **Tiempo 0 hrs**
+
 ```bash
 #Ejecutamos trim_galore para filtrar
-trim_galore --fastqc -j 45 --paired data/raw/pulquet0_1_10M.fastq data/raw/pulquet0_2_10M.fastq -o results/02.trimgalore/pulquet0_trimgalore
+trim_galore --fastqc -j 45 --paired data/raw/pulque/pulquet0_1_10M.fastq data/raw/pulque/pulquet0_2_10M.fastq -o results/02.trimgalore/pulquet0_trimgalore
 ```
+**NOTA** Limpiamos los de tiempo 0, pero nos falta aguamiel, tiempo 3,6 y 12 horas
 
-Para evaluar los resultados de calidad tras el filtrado, podemos ejecutar **multiqc**.
+Para evaluar los resultados de calidad tras el filtrado, podemos ejecutar **multiqc** otra vez pero sobre los datos ya limpios
 
 Creamos el directorio donde alojaremos las entradas de multiqc y movemos estos archivos al nuevo directorio.
 
