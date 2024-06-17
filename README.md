@@ -133,8 +133,14 @@ cat results/02.trimgalore/*/*_2.fq > data/clean/fermentation_2.fastq
 
 Ejecutamos megahit ...
 
+**Coensamble**
 ```bash
 megahit -t 34 --k-list 21,33,55,77,99,127 --min-contig-len 1000 -1 data/clean/fermentation_1.fastq -2 data/clean/fermentation_2.fastq -o results/03.megahit 
+```
+**Solo aguamiel**
+
+```bash
+megahit -t 34 --k-list 21,33,55,77,99,127 --min-contig-len 1000 -1 data/clean/Pulque-AM_SRR10997050_1_10M_val_1_val_1.fq -2 data/clean/Pulque-AM_SRR10997050_2_10M_val_2_val_2.fq -o results/03.megahit_AM
 ```
 
 #### **[MetaSPAdes](https://github.com/ablab/spades)** 
