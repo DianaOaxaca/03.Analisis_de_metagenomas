@@ -95,7 +95,7 @@ La herramienta **[TrimGalore](https://github.com/FelixKrueger/TrimGalore)** nos 
 Vamos a limpiar los datos de **Aguamiel**
 
 ```bash
-trim_galore --fastqc -j 15 --paired data/raw/pulque/Pulque-AM_SRR10997050_1_10M.fastq data/raw/pulque/Pulque-AM_SRR10997050_2_10M.fastq -o results/02.trimgalore/pulqueAM_trimgalore
+trim_galore --illumina --fastqc -j 15 --paired data/raw/pulque/Pulque-AM_SRR10997050_1_10M.fastq data/raw/pulque/Pulque-AM_SRR10997050_2_10M.fastq -o results/02.trimgalore/pulqueAM_trimgalore
 ```
 
 **NOTA** Limpiamos los de aguamiel, pero faltan otros tiempos. Podemos hacer un ciclo for para correr todos o correrlos por separado.
