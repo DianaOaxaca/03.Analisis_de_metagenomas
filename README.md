@@ -80,6 +80,7 @@ Y corremos multiqc
 
 multiqc results/01.fastqc/*.zip -o results/01.fastqc/multiqc
 ```
+Descarga y visualiza el archivo multiqc_report.html
 
 La herramienta **[TrimGalore](https://github.com/FelixKrueger/TrimGalore)** nos permite eliminar lecturas de baja calidad, adaptadores, etc. Y con  [**MultiQC**](https://github.com/ewels/MultiQC), podemos ver las calidades del conjunto de lecturas. Existen otros programas para limpiar las lecturas como **[Trimmomatic](https://github.com/usadellab/Trimmomatic)**.
 
