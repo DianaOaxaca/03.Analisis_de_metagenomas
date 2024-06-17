@@ -98,7 +98,7 @@ Vamos a limpiar los datos de **Aguamiel**
 trim_galore --fastqc -j 15 --paired data/raw/pulque/Pulque-AM_SRR10997050_1_10M.fastq data/raw/pulque/Pulque-AM_SRR10997050_2_10M.fastq -o results/02.trimgalore/pulqueAM_trimgalore
 ```
 
-**NOTA** Limpiamos los de tiempo 0, pero nos falta aguamiel, tiempo 3, 6 y 12 horas. Podemos hacer un ciclo for para correr todos o correrlos por separado.
+**NOTA** Limpiamos los de aguamiel, pero faltan otros tiempos. Podemos hacer un ciclo for para correr todos o correrlos por separado.
 
 Para evaluar los resultados de calidad tras el filtrado, podemos ejecutar **multiqc** otra vez pero sobre los datos ya limpios
 
