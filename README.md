@@ -156,12 +156,12 @@ Y lo ejecutamos ....
 **coensamble**
 
 ```bash
-nohup spades.py --meta -k 21,33,55,77,99,127 -t 12 -1 data/clean/fermentation_1.fastq -2 data/clean/fermentation_2.fastq -o results/03.metaspades &
+ spades.py --meta -k 21,33,55,77,99,127 -t 12 -1 data/clean/fermentation_1.fastq -2 data/clean/fermentation_2.fastq -o results/03.metaspades &
 ```
 **solo aguamiel**
 
 ```bash
-spades.py --meta -k 21,33,55,77,99,127 -t 12 -1 data/clean/Pulque-AM_SRR10997050_1_10M_val_1_val_1.fq -2 data/clean/Pulque-AM_SRR10997050_2_10M_val_2_val_2.fq -o results/03.metaspades_AM
+nohup spades.py --meta -k 21,33,55,77,99,127 -t 12 -1 data/clean/Pulque-AM_SRR10997050_1_10M_val_1_val_1.fq -2 data/clean/Pulque-AM_SRR10997050_2_10M_val_2_val_2.fq -o results/03.metaspades_AM &
 ```
 
 
