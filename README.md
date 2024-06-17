@@ -24,7 +24,7 @@ https://www.nature.com/articles/s41598-020-71864-4
 
 ```bash
 # Creamos los directorios en donde empezaremos a trabajar
-mkdir -p 03.Análisis_de_metagenomas/{data/{raw,clean},results}
+mkdir -p 03.Análisis_de_metagenomas/data/{raw,clean},results
 #Accedemos al directorio principal
 cd 03.Análisis_de_metagenomas
 ```
