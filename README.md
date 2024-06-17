@@ -164,11 +164,6 @@ spades.py --meta -k 21,33,55,77,99,127 -t 30 -1 data/clean/fermentation_1.fastq 
 spades.py --meta -k 21,33,55,77,99,127 -t 30 -1 data/clean/Pulque-AM_SRR10997050_1_10M_val_1_val_1.fq -2 data/clean/Pulque-AM_SRR10997050_2_10M_val_2_val_2.fq -o results/03.metaspades_AM
 ```
 
-Desactivamos el ambiente
-
-```bash
-conda deactivate
-```
 
 En spades no pudimos delimitar el tamaño mínimo de contig, por lo tanto tenemos que eliminar los de menor tamaño.
 
