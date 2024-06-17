@@ -109,6 +109,7 @@ multiqc results/02.trimgalore/zips/*.zip -o results/02.trimgalore/zips/multiqc
 
 Movemos nuestros datos limpios al subdirectorio `data/clean`
 
+
 ```bash
 mv results/02.trimgalore/*/*.fq data/clean/
 ```
@@ -119,13 +120,19 @@ En este emplo ensamblaremos todas las muestras que dan lugar a la fermentación 
 
 Ensamblaremos con **[MetaSPAdes](https://github.com/ablab/spades)** y **[Megahit](https://github.com/voutcn/megahit)**, después compararemos ambos coensambles basándonos en longitudes de los contigs con QUAST y el porcentaje de lecturas que dan lugar al coensamble, esto con bbmap de **[bbtools](https://jgi.doe.gov/data-and-tools/software-tools/bbtools/)**. 
 
+Para este coensamble concatenamos todas las librerias limpias con `cat` y lo nombramos fermentation **OJO** aqui ya tenemos todas las librerias limpias y copiadas en el directorio `data/clean`
+
+```bash
+cat results/02.trimgalore/*/*_1.fq > data/clean/fermentation_1.fastq
+cat results/02.trimgalore/*/*_2.fq > data/clean/fermentation_2.fastq
+```
 
 #### **[Megahit](https://github.com/voutcn/megahit)**
 
 Ejecutamos megahit ...
 
 ```bash
-megahit -t 34 --k-list 21,33,55,77,99,127 --min-contig-len 1000 -1 data/clean/pulquet0_1_10M_val_1.fq -2 data/clean/fermentation_2.fastq -o results/03.megahit 
+megahit -t 34 --k-list 21,33,55,77,99,127 --min-contig-len 1000 -1 data/clean/fermentation_1.fastq -2 data/clean/fermentation_2.fastq -o results/03.megahit 
 ```
 
 #### **[MetaSPAdes](https://github.com/ablab/spades)** 
