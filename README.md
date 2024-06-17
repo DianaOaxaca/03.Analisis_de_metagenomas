@@ -96,7 +96,7 @@ Vamos a limpiar los datos del **Tiempo 0 hrs**
 
 ```bash
 #Ejecutamos trim_galore para filtrar
-trim_galore --fastqc -j 45 --paired data/raw/pulque/pulquet0_1_10M.fastq data/raw/pulque/pulquet0_2_10M.fastq -o results/02.trimgalore/pulquet0_trimgalore
+trim_galore --fastqc -j 4 --paired data/raw/pulque/pulquet0_1_10M.fastq data/raw/pulque/pulquet0_2_10M.fastq -o results/02.trimgalore/pulquet0_trimgalore
 ```
 **NOTA** Limpiamos los de tiempo 0, pero nos falta aguamiel, tiempo 3, 6 y 12 horas. Podemos hacer un ciclo for para correr todos o correrlos por separado.
 
