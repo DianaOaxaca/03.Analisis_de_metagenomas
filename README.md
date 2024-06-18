@@ -1,6 +1,6 @@
 **Link para ver este contenido en html**
 
-[taller_metagenomas_MAGs.html](https://dianaoaxaca.github.io/03.Analisis_de_metagenomas/taller_metagenomas_MAGs.html)
+[taller_metagenomas_MAGs](https://dianaoaxaca.github.io/03.Analisis_de_metagenomas/Taller_metagenomas_MAGs.html)
 
 
 # Análisis de datos metagenómicos
