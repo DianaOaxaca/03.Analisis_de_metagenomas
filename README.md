@@ -207,8 +207,7 @@ mkdir -p results/04.depth/
 Mapeamos las lecturas al ensamble de metaspades con **bbmap**
 
 ```bash
-#Hacer ligas simbolicas y correr dentro del directorio 04.depth
-nohup bbmap.sh ref=results/03.metaspades/contigsftr.fasta in=data/clean/Pulque-AM_SRR10997050_1_10M_val_1_val_1.fq in2=data/clean/Pulque-AM_SRR10997050_2_10M_val_2_val_2.fq out=results/04.depth/Pulque-AM.metaspades.sam   scafstats=Pulque-AM_metaspades.scafstats &
+nohup bbmap.sh ref=results/03.metaspades/contigsftr.fasta in=data/clean/Pulque-AM_SRR10997050_1_10M_val_1_val_1.fq in2=data/clean/Pulque-AM_SRR10997050_2_10M_val_2_val_2.fq out=results/04.depth/Pulque-AM.metaspades.sam   scafstats=Pulque-AM_metaspades.scafstats > nohup_bbmap_metaspades.out &
 ```
 
 Bien, veamos cuantas lecturas mapearon al ensamble
@@ -231,7 +230,7 @@ cut -f8 results/04.depth/Pulque-AM_metaspades.scafstats | grep -v assignedReads 
 Hagamos lo mismo para el de megahit
 
 ```bash
-nohup bbmap.sh ref=results/03.megahit/final.contigs.fa in=data/clean/Pulque-AM_SRR10997050_1_10M_val_1_val_1.fq in2=data/clean/Pulque-AM_SRR10997050_2_10M_val_2_val_2.fq out=results/04.depth/fermentation.megahit.sam maxindel=80 scafstats=results/04.depth/Pulque-AM_megahit.scafstats &
+nohup bbmap.sh ref=results/03.megahit/final.contigs.fa in=data/clean/Pulque-AM_SRR10997050_1_10M_val_1_val_1.fq in2=data/clean/Pulque-AM_SRR10997050_2_10M_val_2_val_2.fq out=results/04.depth/Pulque-AM.megahit.sam maxindel=80 scafstats=results/04.depth/Pulque-AM_megahit.scafstats > nohup_bbmap_megahit.out &
 ```
 
 Cuántas mapearon?
