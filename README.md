@@ -1,3 +1,8 @@
+**Link para ver este contenido en html**
+
+[taller_metagenomas_MAGs.html](https://dianaoaxaca.github.io/03.Analisis_de_metagenomas/taller_metagenomas_MAGs.html)
+
+
 # Análisis de datos metagenómicos
 
 Práctica para el taller de metagenómica de la Red Mexicana de Bioinformática **RMB** organizado en el **CIBNOR Junio 2024**
