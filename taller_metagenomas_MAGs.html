@@ -3090,6 +3090,9 @@ resultados</p>
 <div class="sourceCode" id="cb19"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a> <span class="ex">spades.py</span> <span class="at">--meta</span> <span class="at">-k</span> 21,33,55,77,99,127 <span class="at">-t</span> 12 <span class="at">-1</span> data/clean/fermentation_1.fastq <span class="at">-2</span> data/clean/fermentation_2.fastq <span class="at">-o</span> results/03.metaspades <span class="kw">&amp;</span></span></code></pre></div>
 <p><strong>solo aguamiel</strong></p>
 <div class="sourceCode" id="cb20"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a><span class="fu">nohup</span> spades.py <span class="at">--meta</span> <span class="at">-k</span> 21,33,55,77,99,127 <span class="at">-t</span> 12 <span class="at">-1</span> data/clean/Pulque-AM_SRR10997050_1_10M_val_1_val_1.fq <span class="at">-2</span> data/clean/Pulque-AM_SRR10997050_2_10M_val_2_val_2.fq <span class="at">-o</span> results/03.metaspades_AM <span class="kw">&amp;</span></span></code></pre></div>
+</div>
+<div id="comparación-de-los-ensambles" class="section level1">
+<h1>03. Comparación de los ensambles</h1>
 <p>En spades no pudimos delimitar el tamaño mínimo de contig, por lo
 tanto tenemos que eliminar los de menor tamaño.</p>
 <p>Veamos cuanto miden los contigs de nuestro ensamble.</p>
@@ -3105,9 +3108,6 @@ filtrar.</p>
 <div class="sourceCode" id="cb24"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a><span class="fu">grep</span> <span class="at">-c</span> <span class="st">&#39;&gt;&#39;</span> contigs.fasta </span>
 <span id="cb24-2"><a href="#cb24-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb24-3"><a href="#cb24-3" aria-hidden="true" tabindex="-1"></a><span class="fu">grep</span> <span class="at">-c</span> <span class="st">&#39;&gt;&#39;</span> contigs.fltr.fasta </span></code></pre></div>
-</div>
-<div id="comparación-de-los-ensambles" class="section level1">
-<h1>03. Comparación de los ensambles</h1>
 <p>Creamos el directorio para los mapeos</p>
 <div class="sourceCode" id="cb25"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a><span class="fu">mkdir</span> <span class="at">-p</span> results/04.depth/</span></code></pre></div>
 <p><a href="https://jgi.doe.gov/data-and-tools/software-tools/bbtools/"><strong>bbtools</strong></a></p>
