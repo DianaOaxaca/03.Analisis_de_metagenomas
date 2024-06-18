@@ -170,10 +170,16 @@ En spades no pudimos delimitar el tamaño mínimo de contig, por lo tanto tenemo
 Veamos cuanto miden los contigs de nuestro ensamble.
 
 ```bash
-infoseq -auto -nocolumns -delimiter '\t' -only -noheading -name -length results/03.metaspades/contigs.fasta | sort -k2n | cut -f2 | sort | uniq -c | sort -k2n | less
+infoseq -auto -nocolumns -delimiter '\t' -only -noheading -name -length results/03.metaspades_AM/contigs.fasta | sort -k2n | cut -f2 | sort | uniq -c | sort -k2n | less
 ```
 
 Vamos a filtrarlo ... Para el filtrado necesitamos entrar al directorio de resultados de spades y ejecutar el script desde ahí.
+
+```bash
+cd results/03.metaspades_AM/
+```
+
+Copia y pega el contenido del script `src/filter_contig_length_sp.py`
 
 ```bash
 python filter_contig_length_sp.py 1000 1 contigs.fasta
@@ -183,9 +189,9 @@ Comparemos el número de contigs que había antes y después de filtrar.
 
 ```bash
 grep -c '>' contigs.fasta 
-173273
+
 grep -c '>' contigs.fltr.fasta 
-18673
+
 ```
 
 ### 3. Comparación de los ensambles
@@ -202,44 +208,47 @@ Mapeamos las lecturas al ensamble de metaspades con **bbmap**
 
 ```bash
 #Hacer ligas simbolicas y correr dentro del directorio 04.depth
-nohup bbmap.sh ref=results/03.metaspades/contigsftr.fasta in=data/clean/fermentation_1.fastq in2=data/clean/fermentation_2.fastq out=results/04.depth/fermentation.metaspades.sam   scafstats=fermentation_metaspades.scafstats &
+nohup bbmap.sh ref=results/03.metaspades/contigsftr.fasta in=data/clean/Pulque-AM_SRR10997050_1_10M_val_1_val_1.fq in2=data/clean/Pulque-AM_SRR10997050_2_10M_val_2_val_2.fq out=results/04.depth/Pulque-AM.metaspades.sam   scafstats=Pulque-AM_metaspades.scafstats &
 ```
 
 Bien, veamos cuantas lecturas mapearon al ensamble
 
+Número de lecturas iniciales
+
 ```bash
-#Número de lecturas iniciales
-95588026
-#Obtenemos las que mapearon
-cut -f8 results/04.depth/fermentation_metaspades.scafstats | grep -v assignedReads | awk '{sum += $1;}END{print sum;}'
-91148282
-#Sacamos el porcentaje
-95.35 %
+wc -l data/clean/Pulque-AM_SRR10997050_1_10M_val_1_val_1.fq
 ```
+**NOTA** este número entre 4 para sacar el numero acercado de lecturas 
+
+Obtenemos las que mapearon
+
+```bash
+cut -f8 results/04.depth/Pulque-AM_metaspades.scafstats | grep -v assignedReads | awk '{sum += $1;}END{print sum;}'
+```
+#Sacamos el porcentaje
+
 
 Hagamos lo mismo para el de megahit
 
 ```bash
-nohup bbmap.sh ref=results/03.megahit/final.contigs.fa in=data/clean/fermentation_1.fastq in2=data/clean/fermentation_2.fastq out=results/04.depth/fermentation.megahit.sam maxindel=80 scafstats=results/04.depth/fermentation_megahit.scafstats &
+nohup bbmap.sh ref=results/03.megahit/final.contigs.fa in=data/clean/Pulque-AM_SRR10997050_1_10M_val_1_val_1.fq in2=data/clean/Pulque-AM_SRR10997050_2_10M_val_2_val_2.fq out=results/04.depth/fermentation.megahit.sam maxindel=80 scafstats=results/04.depth/Pulque-AM_megahit.scafstats &
 ```
 
 Cuántas mapearon?
 
 ```bash
-95588026
-cut -f8 results/04.depth/fermentation_megahit.scafstats | grep -v assignedReads | awk '{sum += $1;}END{print sum;}'
-91218466
-95.428
+cut -f8 results/04.depth/Pulque-AM_megahit.scafstats | grep -v assignedReads | awk '{sum += $1;}END{print sum;}'
 ```
+
 
 Ok, falta observar las longitudes de los contigs y el tamaño del ensamble
 
 #### [QUAST](https://github.com/ablab/quast)
 
-Activemos el ambiente metagenomics para ejecutar **QUAST**
+Activemos el ambiente metagenomas para ejecutar **QUAST**
 
 ```bash
-conda activate metagenomics
+conda activate metagenomas
 ```
 
 Ahora ejecutemos **QUAST** ...
@@ -248,11 +257,6 @@ Ahora ejecutemos **QUAST** ...
 quast.py results/03.metaspades/contigsftr.fasta results/03.megahit/final.contigs.fa -o results/05.quast
 ```
 
-Desactivemos el ambiente
-
-```bash
-conda deactivate
-```
 
 Y veamos la salida de QUAST para determinar la mejor opción.
 
@@ -263,7 +267,7 @@ Ahora que sabemos que ensamble usar para el binning, empezemos.
 Primero vamos a borrar el archivo .sam de megahit porque es muy muy pesado y no lo necesitamos.
 
 ```bash
-rm results/04.depth/fermentation.megahit.sam
+rm results/04.depth/Pulque-AM.megahit.sam
 ```
 
 Ahora si, para poder agrupar en *bins* el coensamble, los *binneadores* requieren de un archivo con las coverturas de cada contig. Afortunadamente ya habíamos mapeado las lecturas, asi que ya tenemos un archivo de mapeo, nos falta convertirlo a formato bam y ordenarlo. Para ello ejecutamos **[samtools](http://www.htslib.org/doc/samtools.html)**
@@ -271,28 +275,23 @@ Ahora si, para poder agrupar en *bins* el coensamble, los *binneadores* requiere
  
 
 ```bash
-samtools view -bShu results/04.depth/fermentation.metaspades.sam | samtools sort -@ 80 -o results/04.depth/fermentation_metaspades_sorted.bam
-samtools index results/04.depth/fermentation_metaspades_sorted.bam
+samtools view -bShu results/04.depth/Pulque-AM.metaspades.sam | samtools sort -@ 80 -o results/04.depth/Pulque-AM_metaspades_sorted.bam
+samtools index results/04.depth/Pulque-AM_metaspades_sorted.bam
 ```
 
 Y borramos el `.sam`
 
 ```bash
-rm results/04.depth/fermentation.metaspades.sam
+rm results/04.depth/Pulque-AM.metaspades.sam
 ```
 
 Ahora vamos a obtener la información en el formato que necesitan los programas que harán el *binning*. Para ello usamos `jgi_summarize_bam_contig_depths` .
 
-Activamos el ambiente de metabat
-
-```bash
-conda activate metabat
-```
 
 Ahora si, obtengamos la información del mapeo
 
 ```bash
-jgi_summarize_bam_contig_depths --outputDepth results/04.depth/fermentation_metaspades_depth.txt results/04.depth/fermentation_metaspades_sorted.bam 
+jgi_summarize_bam_contig_depths --outputDepth results/04.depth/Pulque-AM_metaspades_depth.txt results/04.depth/Pulque-AM_metaspades_sorted.bam 
 ```
 
 #### [Metabat2](https://bitbucket.org/berkeleylab/metabat/src/master/)
@@ -300,20 +299,13 @@ jgi_summarize_bam_contig_depths --outputDepth results/04.depth/fermentation_meta
 Ejecutemos **metabat2**
 
 ```bash
-metabat2 -i results/03.metaspades/contigsftr.fasta -a results/04.depth/fermentation_metaspades_depth.txt -o results/06.metabat/metabat_bin -t 50 -m 1500
-# Y desactivemos el ambiente
-conda deactivate
+metabat2 -i results/03.metaspades/contigsftr.fasta -a results/04.depth/Pulque-AM_metaspades_depth.txt -o results/06.metabat/metabat_bin -t 50 -m 1500
 ```
 
 #### [Maxbin](https://sourceforge.net/p/maxbin/code/ci/master/tree/)
 
 Ahora ejecutemos **Maxbin**
 
-Activa el ambiente
-
-```bash
-conda activate maxbin
-```
 
 Creamos el directorio de estos resultados
 
@@ -324,7 +316,7 @@ mkdir -p results/07.maxbin/
 Ahora si, corremos Maxbin
 
 ```bash
-run_MaxBin.pl -thread 48 -min_contig_length 1500 -contig results/03.metaspades/contigsftr.fasta -out results/07.maxbin/maxbin  -abund results/04.depth/fermentation_metaspades_depth.txt
+run_MaxBin.pl -thread 48 -min_contig_length 1500 -contig results/03.metaspades/contigsftr.fasta -out results/07.maxbin/maxbin  -abund results/04.depth/Pulque-AM_metaspades_depth.txt
 ```
 
 Y desactivamos el ambiente
@@ -339,9 +331,20 @@ Ya casi....
 
 Corramos **Vamb**
 
+Activamos el ambiente de vamb
+
 ```bash
-/botete/diana/.local/bin/vamb
-vamb --fasta results/03.metaspades/contigsftr.fasta --jgi results/04.depth/fermentation_metaspades_depth.txt --minfasta 500000 --outdir results/08.vamb
+conda activate vamb_env
+```
+
+```bash
+vamb --fasta results/03.metaspades/contigsftr.fasta --jgi results/04.depth/Pulque-AM_metaspades_depth.txt --minfasta 500000 --outdir results/08.vamb
+```
+
+Descativamos el ambiente
+
+```bash
+conda deactivate
 ```
 
 ### 5. Refinamiento
@@ -353,7 +356,7 @@ Tenemos los resultados de tres *binneadores*, muchos de estos *bins* estarán re
 Primero activamos el ambiente.
 
 ```bash
-conda activate das_tool
+conda activate das_tool_env
 ```
 
 Creamos un directorio de trabajo para los resultados
@@ -366,25 +369,37 @@ Y creamos archivos tabulares que son legibles para DAS_Tool
 
 ```bash
 #Para metabat
-Fasta_to_Contig2Bin.sh -i results/06.metabat/ -e fa > results/09.dastool/fermentation_metabat.dastool.tsv
+Fasta_to_Contig2Bin.sh -i results/06.metabat/ -e fa > results/09.dastool/Pulque-AM_metabat.dastool.tsv
 #Para maxbin
-Fasta_to_Contig2Bin.sh -i results/07.maxbin/ -e fasta > results/09.dastool/fermentation_maxbin.dastool.tsv
+Fasta_to_Contig2Bin.sh -i results/07.maxbin/ -e fasta > results/09.dastool/Pulque-AM_maxbin.dastool.tsv
 #Para vamb
-Fasta_to_Contig2Bin.sh -i results/08.vamb/bins/ -e fna > results/09.dastool/fermentation_vamb.dastool.tsv
+Fasta_to_Contig2Bin.sh -i results/08.vamb/bins/ -e fna > results/09.dastool/Pulque-AM_vamb.dastool.tsv
 ```
 
 Ahora si, ejecutemos DAS_Tool:
 
 ```bash
-DAS_Tool -i results/09.dastool/fermentation_maxbin.dastool.tsv,results/09.dastool/fermentation_metabat.dastool.tsv,results/09.dastool/fermentation_vamb.dastool.tsv -l maxbin,metabat,vamb -c results/03.metaspades/contigsftr.fasta -o results/09.dastool/fermentation_bins -t 12 --write_bins
+DAS_Tool -i results/09.dastool/Pulque-AM_maxbin.dastool.tsv,results/09.dastool/Pulque-AM_metabat.dastool.tsv,results/09.dastool/Pulque-AM_vamb.dastool.tsv -l maxbin,metabat,vamb -c results/03.metaspades/contigsftr.fasta -o results/09.dastool/Pulque-AM_bins -t 12 --write_bins
+```
+
+Desactivamos el ambiente
+
+```bash
+conda deactivate
 ```
 
 #### [CheckM](https://ecogenomics.github.io/CheckM/)
 
 Ya desreplicamos los *bins* que obtuvimos, pero nos falta evaluar la calidad de estos, para ello ejecutaremos **CheckM**
 
+Activamos el ambiente
+
 ```bash
-checkm lineage_wf results/09.dastool/fermentation_bins_DASTool_bins/ results/10.checkm/ -x fa -t 40  -f results/10.checkm/checkm_dastool_bins.txt
+conda activate metagenomas
+```
+
+```bash
+checkm lineage_wf results/09.dastool/Pulque-AM_bins_DASTool_bins/ results/10.checkm/ -x fa -t 40  -f results/10.checkm/checkm_dastool_bins.txt
 ```
 
 
@@ -405,17 +420,7 @@ En equipos, ejecuten el flujo de análisis a partir de los ensamble y su compara
 
 2. Crea los directorios de trabajo, el directorio principal será el del nombre d ela muestra que analizarán
 
-3. Crea una liga simbólica de los datos limpios correspondientes a la muestra que eligieron y ponlos en tu directorio `data` los datos se encuentran en:
-
-   ```bash
-   /botete/diana/Hackeando_las_comunidades_microbianas_v1/03.Analisis_de_metagenomas/data/clean/
-   ```
-
-4. Para remover los contigs cortos puedes copiar el script `filter_contig_length_sp.py` al directorio de resultados de **metaspades**, su ubicación es:
-
-   ```bash
-   /botete/diana/Hackeando_las_comunidades_microbianas_v1/03.Analisis_de_metagenomas/src/filter_contig_length_sp.py
-   ```
+3. Crea una liga simbólica de los datos limpios correspondientes a la muestra que eligieron y ponlos en tu directorio `data`
 
    
 
