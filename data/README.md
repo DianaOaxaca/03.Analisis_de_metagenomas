@@ -1,4 +1,4 @@
-# Aqui describo todos los pasos del flujo de analisis
+# Aqui describo los pasos para obtener los datos
 
 ## 01. Obtener el filereport del ENA para descargar los datos
 https://www.ebi.ac.uk/ena/browser/view/PRJNA603591
