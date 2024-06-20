@@ -486,7 +486,7 @@ while IFS= read -r line; do
   # Verificar los criterios
   if (( $(echo "$completeness > 50" | bc -l) )) && (( $(echo "$contamination < 10" | bc -l) )); then
     # Formar el nombre del archivo con la extensión correcta
-    file_name="${bin_id}.fa.gz"
+    file_name="${bin_id}.fa"
     
     # Verificar si el archivo existe en el directorio fuente
     if [[ -f "$source_dir/$file_name" ]]; then
