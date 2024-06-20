@@ -455,7 +455,58 @@ sed 's#bin#cp results/09.dastool/Pulque-AM_bins/bin#g' results/10.checkm/lista_m
 bash results/11.Bins/copy_bins.sh
 ```
 
-Exploremos....
+**SELECCIÓN DE LOS BINS**
+**OPCIÓN CON BASH**
+
+
+Crea un script con vim o nano que se llame `filter_bins.sh` y copia el siguiente contenido:
+
+```bash
+#!/bin/bash
+
+# Archivos y directorios
+input_file="results/10.checkm/checkm_dastool_bins.txt"
+source_dir="results/09.dastool/Pulque-AM_bins"
+mkdir -p "results/11.Bins"
+destination_dir="results/11.Bins"
+
+
+# Leer el archivo línea por línea
+while IFS= read -r line; do
+  # Saltar la línea de encabezado y las líneas de separación
+  if [[ "$line" == *"Completeness"* ]] || [[ "$line" == *"----"* ]]; then
+    continue
+  fi
+
+  # Extraer los valores necesarios
+  bin_id=$(echo "$line" | awk '{print $1}')
+  completeness=$(echo "$line" | awk '{print $(NF-2)}')
+  contamination=$(echo "$line" | awk '{print $(NF-1)}')
+
+  # Verificar los criterios
+  if (( $(echo "$completeness > 50" | bc -l) )) && (( $(echo "$contamination < 10" | bc -l) )); then
+    # Formar el nombre del archivo con la extensión correcta
+    file_name="${bin_id}.fa.gz"
+    
+    # Verificar si el archivo existe en el directorio fuente
+    if [[ -f "$source_dir/$file_name" ]]; then
+      # Copiar el archivo al directorio de destino
+      cp "$source_dir/$file_name" "$destination_dir/"
+    else
+      echo "Archivo no encontrado: $file_name"
+    fi
+  fi
+done < "$input_file"
+```
+ Ahora ejecutalo desde el directorio principal asi:
+
+```bash
+bash filter_bins.sh
+```
+
+Taran!!!
+
+Ahora si, exploremos....
 
 ```bash
 grep '>' results/11.Bins/*.fa
