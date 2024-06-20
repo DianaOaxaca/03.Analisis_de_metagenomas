@@ -656,7 +656,7 @@ Estas visualizaciones te ayudarán a explorar y comprender mejor los datos metab
 - haz varias pruebas,
 - visita foros de ayuda,
 - toma las mejores decisiones
-- Disfruta el proceso ****
+- Disfruta el proceso****
 
 
 
