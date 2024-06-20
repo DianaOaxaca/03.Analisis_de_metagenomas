@@ -31,12 +31,12 @@ https://www.nature.com/articles/s41598-020-71864-4
 
 ```bash
 # Creamos los directorios en donde empezaremos a trabajar
-mkdir -p Análisis_de_metagenomas/{data/{raw,clean},results}
+mkdir -p Analisis_de_metagenomas/{data/{raw,clean},results}
 ```
 
 ```bash
 #Accedemos al directorio principal
-cd Análisis_de_metagenomas
+cd Analisis_de_metagenomas
 ```
 
 ### 1. Análisis de calidad y filtrado de las lecturas
@@ -63,7 +63,7 @@ conda activate fastqc
 Ejecutamos  fastqc
 
 ```bash
-cd ~/Análisis_metagenomas/
+cd ~/Analisis_metagenomas/
 ```
 
 ```bash
@@ -353,7 +353,7 @@ Descativamos el ambiente
 conda deactivate
 ```
 
-### 5. Refinamiento
+### 5. Refinamiento y Selección
 
 #### [DAS_Tool](https://github.com/cmks/DAS_Tool)
 
@@ -408,25 +408,257 @@ conda activate metagenomas
 checkm lineage_wf results/09.dastool/Pulque-AM_bins_DASTool_bins/ results/10.checkm/ -x fa -t 40  -f results/10.checkm/checkm_dastool_bins.txt
 ```
 
+Analicemos la salida...
+
+Ahora debemos filtrar los bins que cumplan con criterios de calidad
+
+**Paso 1: remover las lineas que no nos sirven**
+
+```bash
+sed -e '1,3d' results/10.checkm/checkm_dastool_bins.txt | sed -e '6d' > results/10.checkm/CheckM-DAS_Tool_bins_mod.txt
+```
+**Paso 2: seleccionarlos**
+
+Con R
+
+```R
+library(tidyverse)
+# CheckM -------------------------------------------------------------------####
+checkm<-read.table("CheckM-DAS_Tool_bins_mod.txt", sep = "", header = F, na.strings ="", stringsAsFactors= F)
+# Extracting good quality bins Megahit ------------------------------------####
+colnames(checkm)<-c("Bin_Id", "Marker", "lineage", "Number_of_genomes", 
+                         "Number_of_markers", "Number_of_marker_sets", 
+                         "0", "1", "2", "3", "4", "5", "Completeness", 
+                         "Contamination", "Strain_heterogeneity")  
+
+good_bins<-checkm %>%
+  select(Bin_Id, Marker, Completeness, Contamination) %>%
+  filter(Completeness >= 50.00 & Contamination <= 10.00)
+
+bins<-good_bins$Bin_Id
+
+write.table(bins, "lista_medium_bins", quote = F, row.names = F, col.names = F)
+```
+
+**Paso 3: Copiarlos**
+
+```bash
+mkdir -p results/11.Bins
+```
+
+```bash
+sed 's#bin#cp results/09.dastool/Pulque-AM_bins/bin#g' results/10.checkm/lista_medium_bins | sed 's#$#.fa results/11.Bins#g' > results/11.Bins/copy_bins.sh
+```
+
+```bash
+bash results/11.Bins/copy_bins.sh
+```
+
+Exploremos....
+
+```bash
+grep '>' results/11.Bins/*.fa
+```
+
+### 6. Taxonomía
+
+En esta sección, exploraremos la taxonomía de los bins utilizando [GTDB-tk](https://github.com/Ecogenomics/GTDBTk).
+
+```bash
+mkdir -p results/12.GTDBtk
+```
+Activamos el ambiente
+
+```bash
+conda activate 	gtdbtk_env
+```
+
+Ahora si, a correrlo!!
+
+```bash
+gtdbtk classify_wf --genome_dir results/11.Bins --out_dir results/11.GTDBtk --cpus 15 -x fa
+```
+
+Después de ejecutar GTDB-tk, continuaremos en R para visualizar los datos.
+
+Análisis en R
+
+```R
+library(tidyverse)
+
+GTDBK <- read.table("results/11.GTDBtk/gtdbtk.bac120.summary.tsv", 
+  sep = "\t", header = TRUE, na.strings = "", stringsAsFactors = FALSE) %>%
+  as_tibble()
+
+#El archivo contiene información sobre la clasificación taxonómica de los bins.
+#Continuamos limpiando y transformando los datos:
+
+pulque_gtdbtk <- GTDBK %>%
+  select(user_genome, classification) %>%
+  separate(classification, c("Domain", "Phylum", "Class", "Order", "Family", "Genus", "Species"), sep = ";") %>%
+  rename(Bin_name = user_genome) %>%
+  unite(Bin_name_2, c("Bin_name", "Phylum"), remove = FALSE) %>%
+  select(Bin_name, Domain, Phylum, Class, Order, Family, Genus, Species)
+
+#Guardamos los datos en un archivo de metadatos:
+write.table(pulque_gtdbtk, file = "results/11.GTDBTK/Metadatos.txt", sep = "\t", quote = FALSE, row.names = FALSE, col.names = TRUE)
+```
+
+Visualización de Datos
+Creamos un gráfico de barras interactivo que muestra la distribución taxonómica de los bins:
+
+```R
+GTDBtk <- pulque_gtdbtk %>%
+  count(Domain, Phylum) %>%
+  rename(Number_of_MAGs = n) %>%
+  ggplot(aes(x = Domain, y = Number_of_MAGs, fill = Phylum)) + 
+  geom_bar(stat = "identity", position = position_dodge()) +
+  theme_minimal()
+```
+
+Si prefieres una visualización interactiva:
+
+```R
+library(plotly)
+GTDBtk_p_fig <- ggplotly(GTDBtk)
+```
+
+### 7. Inferencia Metabólica
+En esta sección, exploraremos la inferencia metabólica de los bins de nuestro análisis.
+
+**Preparación de Carpetas**
+Comenzaremos creando dos carpetas llamadas “Genoma” y “Proteoma” para organizar nuestros archivos:
+
+```bash
+mkdir results/11.Bins/Genoma
+mkdir results/11.Bins/Proteoma
+```
+
+Luego, moveremos todos los archivos con extensión “.fa” a la carpeta “Genoma”:
+
+```bash
+mv results/11.Bins/*.fa results/11.Bins/Genoma
+```
+
+**Predicción de Proteínas**
+
+Utilizaremos Prodigal para predecir las proteínas a partir de los genomas:
+
+```bash
+cd results/11.Bins/Genoma/
+for i in $(ls *.fa); do prodigal -i $i -o results/11.Bins/Proteoma/$i.txt -a results/11.Bins/Proteoma/$i.faa ; done
+cd
+```
+
+Podemos revisar las proteínas predichas con:
+
+```bash
+grep ">" results/11.Bins/Proteoma/*.faa
+```
+
+**Anotación de Proteínas con KEGG**
+Utilizaremos KEGG, una base de datos que proporciona información sobre genes, proteínas, rutas metabólicas y más.
+
+Ahora, utilizaremos [kofam_scan](https://github.com/takaram/kofam_scan) para anotar las proteínas:
+
+Activamos el ambiente
+
+```bash
+conda activate kofamscan_env
+```
+
+```bash
+mkdir -p results/13.KOFAM
+cd results/11.Bins/Proteoma/
+for i in *.faa; do /RUTA_DE_KOFAM/exec_annotation -o results/13.KOFAM/$i.txt $i --report-unannotated --cpu 14 -p /RUTA_databases/kofamscan_dbs/profiles -k /RUTA_databases/kofamscan_dbs/ko_list; done
+cd
+```
+
+### 8. Exploración Metabólica con Rbims
+Vamos a explorar el metabolismo utilizando [RbiMs](https://github.com/mirnavazquez/RbiMs). Primero, instalamos las bibliotecas necesarias en R:
+
+```R
+install.packages("devtools")
+library(devtools)
+install_github("mirnavazquez/RbiMs")
+library(rbims)
+library(tidyverse)
+A continuación, leemos los resultados de KEGG y los mapeamos con la base de datos de KEGG:
+
+pulque_mapp <- read_ko("08.Kofamscan/02.KO_results/") %>%
+    mapping_ko()
+Nos centraremos en las vías metabólicas relacionadas con la obtención de energía:
+
+Overview <- c("Central Metabolism", "Carbon Fixation", "Nitrogen Metabolism", "Sulfur Metabolism", "Fermentation", "Methane Metabolism")
+Energy_metabolisms_pulque <- pulque_mapp %>%
+  drop_na(Cycle) %>%
+  get_subset_pathway(rbims_pathway, Overview) 
+Visualizamos los datos con un gráfico de burbujas:
+
+plot_bubble(tibble_ko = Energy_metabolisms_pulque,
+            x_axis = Bin_name, 
+            y_axis = Pathway_cycle,
+            analysis = "KEGG",
+            calc = "Percentage",
+            range_size = c(1, 10),
+            y_labs = FALSE,
+            x_labs = FALSE)  
+Añadiremos metadatos, como la taxonomía:
+
+Metadatos <- read_delim("11.GTDBTK/Metadatos.txt", delim = "\t")
+Y generaremos un gráfico de burbujas con metadatos:
+
+plot_bubble(tibble_ko = Energy_metabolisms_pulque,
+            x_axis = Bin_name, 
+            y_axis = Pathway_cycle,
+            analysis = "KEGG",
+            data_experiment = Metadatos,
+            calc = "Percentage",
+            color_character = Class,
+            range_size = c(1, 10),
+            y_labs = FALSE,
+            x_labs = FALSE) 
+Exploración de una Vía Específica
+Podemos explorar una sola vía, como el “Secretion system,” y crear un mapa de calor para visualizar los genes relacionados con esta vía:
+
+Secretion_system_pulque <- pulque_mapp %>%
+  drop_na(Cycle) %>%
+  get_subset_pathway(Cycle, "Secretion system")
+Y, finalmente, generamos un mapa de calor:
+
+plot_heatmap(tibble_ko = Secretion_system_pulque, 
+             y_axis = Genes,
+             analysis = "KEGG",
+             calc = "Binary")
+También podemos agregar metadatos para obtener una visión más completa:
+
+plot_heatmap(tibble_ko = Secretion_system_pulque, 
+             y_axis = Genes,
+             data_experiment = Metadatos,
+             order_x = Phylum,
+             analysis = "KEGG",
+             calc = "Binary")
+plot_heatmap(tibble_ko = Secretion_system_pulque, 
+             y_axis = Genes,
+             data_experiment = Metadatos,
+             order_y = Pathway_cycle,
+             order_x = Phylum,
+             analysis = "KEGG",
+             calc = "Binary")
+```
+
+Estas visualizaciones te ayudarán a explorar y comprender mejor los datos metabólicos de tus bins.
+
+****Detente a observar tus datos, 
+- revisa la ayuda de cada programa,
+- elige los parámetros que mejor se adapten a tus datos,
+- analiza los resultados,
+- haz varias pruebas,
+- visita foros de ayuda,
+- toma las mejores decisiones
+- Disfruta el proceso ****
 
 
-Recordemos que hay más herramientas para desreplicar como **dRep** y también para refinar los bins que obtengamos, como **RefineM**. Si te es posible, detente a observar tus datos, analiza los resultados, prueba lo que puedas y toma las mejores decisiones.
-
-
-
-## Ejercicio!!!
-
-Bien, ya hemos visto el flujo de trabajo, revisamos algunas salidas y las tomas de decisiones. Ahora te toca a tí.
-
-¿Cómo serían los resultados si en lugar de un coensamble se analizan las muestras individuales? Averiguémoslo entre todXs.
-
-En equipos, ejecuten el flujo de análisis a partir de los ensamble y su comparación hasta el binning. Tomen sólo las lecturas de una muestra, anotaremos los resultados en una tabla compartida y al final los discutiremos.
-
-1. Elige un equipo y que muestra analizarán
-
-2. Crea los directorios de trabajo, el directorio principal será el del nombre d ela muestra que analizarán
-
-3. Crea una liga simbólica de los datos limpios correspondientes a la muestra que eligieron y ponlos en tu directorio `data`
 
    
 
