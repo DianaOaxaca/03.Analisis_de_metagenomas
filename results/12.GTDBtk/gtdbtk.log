@@ -1,0 +1,51 @@
+[2023-10-31 10:16:49] INFO: GTDB-Tk v2.1.1
+[2023-10-31 10:16:49] INFO: gtdbtk classify_wf --genome_dir genomes/ --out_dir 11.gtdbtk/ --cpus 40 -x fa
+[2023-10-31 10:16:49] INFO: Using GTDB-Tk reference data version r207: /data/bases/gtdbtk
+[2023-10-31 10:16:49] INFO: Identifying markers in 5 genomes with 40 threads.
+[2023-10-31 10:16:49] TASK: Running Prodigal V2.6.3 to identify genes.
+[2023-10-31 10:17:01] INFO: Completed 5 genomes in 12.00 seconds (2.40 seconds/genome).
+[2023-10-31 10:17:01] TASK: Identifying TIGRFAM protein families.
+[2023-10-31 10:17:06] INFO: Completed 5 genomes in 4.52 seconds (1.11 genomes/second).
+[2023-10-31 10:17:06] TASK: Identifying Pfam protein families.
+[2023-10-31 10:17:06] INFO: Completed 5 genomes in 0.36 seconds (14.03 genomes/second).
+[2023-10-31 10:17:06] INFO: Annotations done using HMMER 3.1b2 (February 2015).
+[2023-10-31 10:17:06] TASK: Summarising identified marker genes.
+[2023-10-31 10:17:06] INFO: Completed 5 genomes in 0.09 seconds (57.79 genomes/second).
+[2023-10-31 10:17:06] INFO: Done.
+[2023-10-31 10:17:07] INFO: Aligning markers in 5 genomes with 40 CPUs.
+[2023-10-31 10:17:07] INFO: Processing 5 genomes identified as bacterial.
+[2023-10-31 10:17:32] INFO: Read concatenated alignment for 62,291 GTDB genomes.
+[2023-10-31 10:17:32] TASK: Generating concatenated alignment for each marker.
+[2023-10-31 10:17:35] INFO: Completed 5 genomes in 0.02 seconds (212.06 genomes/second).
+[2023-10-31 10:17:35] TASK: Aligning 120 identified markers using hmmalign 3.1b2 (February 2015).
+[2023-10-31 10:17:39] INFO: Completed 120 markers in 1.32 seconds (91.12 markers/second).
+[2023-10-31 10:17:39] TASK: Masking columns of bacterial multiple sequence alignment using canonical mask.
+[2023-10-31 10:20:08] INFO: Completed 62,296 sequences in 2.47 minutes (25,202.42 sequences/minute).
+[2023-10-31 10:20:08] INFO: Masked bacterial alignment from 41,084 to 5,036 AAs.
+[2023-10-31 10:20:08] INFO: 0 bacterial user genomes have amino acids in <10.0% of columns in filtered MSA.
+[2023-10-31 10:20:08] INFO: Creating concatenated alignment for 62,296 bacterial GTDB and user genomes.
+[2023-10-31 10:20:36] INFO: Creating concatenated alignment for 5 bacterial user genomes.
+[2023-10-31 10:20:36] INFO: Done.
+[2023-10-31 10:20:37] TASK: Placing 5 bacterial genomes into backbone reference tree with pplacer using 40 CPUs (be patient).
+[2023-10-31 10:20:37] INFO: pplacer version: v1.1.alpha19-0-g807f6f3
+[2023-10-31 10:23:42] INFO: Calculating RED values based on reference tree.
+[2023-10-31 10:23:43] INFO: 5 out of 5 have an class assignments. Those genomes will be reclassified.
+[2023-10-31 10:23:43] TASK: Placing 4 bacterial genomes into class-level reference tree 6 (1/2) with pplacer using 40 CPUs (be patient).
+[2023-10-31 10:32:25] INFO: Calculating RED values based on reference tree.
+[2023-10-31 10:32:27] TASK: Traversing tree to determine classification method.
+[2023-10-31 10:32:27] INFO: Completed 4 genomes in 0.00 seconds (2,520.62 genomes/second).
+[2023-10-31 10:32:28] TASK: Calculating average nucleotide identity using FastANI (v1.3).
+[2023-10-31 10:32:33] INFO: Completed 188 comparisons in 4.88 seconds (38.49 comparisons/second).
+[2023-10-31 10:32:33] INFO: 2 genome(s) have been classified using FastANI and pplacer.
+[2023-10-31 10:32:33] TASK: Placing 1 bacterial genomes into class-level reference tree 4 (2/2) with pplacer using 40 CPUs (be patient).
+[2023-10-31 10:40:13] INFO: Calculating RED values based on reference tree.
+[2023-10-31 10:40:15] TASK: Traversing tree to determine classification method.
+[2023-10-31 10:40:15] INFO: Completed 1 genome in 0.00 seconds (6,026.30 genomes/second).
+[2023-10-31 10:40:16] TASK: Calculating average nucleotide identity using FastANI (v1.3).
+[2023-10-31 10:40:18] INFO: Completed 6 comparisons in 2.50 seconds (2.40 comparisons/second).
+[2023-10-31 10:40:18] INFO: 1 genome(s) have been classified using FastANI and pplacer.
+[2023-10-31 10:40:19] INFO: Note that Tk classification mode is insufficient for publication of new taxonomic designations. New designations should be based on one or more de novo trees, an example of which can be produced by Tk in de novo mode.
+[2023-10-31 10:40:19] INFO: Done.
+[2023-10-31 10:40:19] INFO: Removing intermediate files.
+[2023-10-31 10:40:19] INFO: Intermediate files removed.
+[2023-10-31 10:40:19] INFO: Done.
